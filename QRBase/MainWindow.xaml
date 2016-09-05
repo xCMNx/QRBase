@@ -1,0 +1,25 @@
+﻿<Window x:Class="QRBase.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:QRBase"
+        xmlns:mdl="clr-namespace:QRBase.Models"
+        mc:Ignorable="d"
+        xmlns:views="clr-namespace:Views"
+        local:CommandSinkBinding.CommandSink="{Binding}"
+        xmlns:ui="clr-namespace:Ui.Controls;assembly=Ui"
+        Title="QRGenerator" Height="350" Width="525">
+	<Window.DataContext>
+		<mdl:MainVM/>
+	</Window.DataContext>
+	<Window.CommandBindings>
+		<local:CommandSinkBinding Command="mdl:MainVM.NewQRCommand" />
+		<local:CommandSinkBinding Command="mdl:MainVM.NewFieldCommand" />
+	</Window.CommandBindings>
+	<Grid>
+		<views:List IsEnabled="{Binding Visibility, ElementName=QuestionPanel, Converter={StaticResource VisToBoolnv}}"/>
+		<ui:Question Name="QuestionPanel" DataContext="{Binding Question}" Visibility="{Binding Visibility}" Title="{Binding Title}" Messages="{Binding Messages}" Params="{Binding Fields}" OkCommand="{Binding Ok}" CancelCommand="{Binding Cancel}"/>
+		<ui:Toast Name="ToastPanel" DataContext="{Binding Toast}" Text="{Binding Text}" Visibility="{Binding Visibility, Mode=OneWay}" Delay="{Binding Delay}"/>
+	</Grid>
+</Window>
