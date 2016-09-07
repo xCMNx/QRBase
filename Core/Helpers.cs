@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -558,5 +559,8 @@ namespace Core
 
 			return columnName;
 		}
+
+		static char[] invalidChars = System.IO.Path.GetInvalidFileNameChars();
+		public static string GetValidFileName(this string fileName) => new string(fileName.Select(m => invalidChars.Contains(m) ? '_' : m).ToArray<char>());
 	}
 }

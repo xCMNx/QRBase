@@ -1,6 +1,9 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
+using QRBase.Models;
 using Ui.Controls;
+using System.Linq;
+using Core;
 
 namespace Views
 {
@@ -39,19 +42,24 @@ namespace Views
 			//StaticData.PreviewTasks.CancelTask(((DataItem)e.Value).Md5);
 		}
 
-		private void GlyphButton_Click(object sender, System.Windows.RoutedEventArgs e)
+		private void btnList_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
 			LV.View = gridView;
 		}
 
-		private void GlyphButton_Click_1(object sender, System.Windows.RoutedEventArgs e)
+		private void btnTile_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
 			LV.View = tileView;
 		}
 
-		private void GlyphButton_Click_2(object sender, System.Windows.RoutedEventArgs e)
+		private void btnGalery_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
 			LV.View = galeryView;
+		}
+
+		private void LV_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			MainVM.Instance.SelectedQRList = LV.SelectedItems.OfType<QRData>().ToArray();
 		}
 	}
 }

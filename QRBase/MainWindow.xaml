@@ -16,6 +16,8 @@
 	<Window.CommandBindings>
 		<local:CommandSinkBinding Command="mdl:MainVM.NewQRCommand" />
 		<local:CommandSinkBinding Command="mdl:MainVM.NewFieldCommand" />
+		<local:CommandSinkBinding Command="mdl:MainVM.SettingsCommand" />
+		<local:CommandSinkBinding Command="mdl:MainVM.ExportCommand" />
 	</Window.CommandBindings>
 	<Grid>
 		<views:List IsEnabled="{Binding Visibility, ElementName=QuestionPanel, Converter={StaticResource VisToBoolnv}}"/>

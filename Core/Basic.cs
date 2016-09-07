@@ -127,19 +127,29 @@ namespace Core
 		}
 	}
 
-	public class IntValueItem : BindableBase, IParametersValueItem
+	public class NumericValueItem : BindableBase, IParametersValueItem
 	{
-		public int Int => Value;
+		public int Int => Convert.ToInt32(Value);
 		public dynamic Value { get; set; }
-		public int MinValue { get; private set; } = int.MinValue;
-		public int MaxValue { get; private set; } = int.MaxValue;
-		public IntValueItem(int val, int? min = null, int? max = null)
+		public decimal MinValue { get; private set; } = decimal.MinValue;
+		public decimal MaxValue { get; private set; } = decimal.MaxValue;
+		public string NumericFormat { get; private set; }
+		public NumericValueItem(decimal val, decimal? min = null, decimal? max = null, string numericFormat = "N2")
 		{
 			Value = val;
 			if (min.HasValue)
 				MinValue = min.Value;
 			if (max.HasValue)
 				MaxValue = max.Value;
+			NumericFormat = numericFormat;
+		}
+		public NumericValueItem(int val, int? min = null, int? max = null) 
+		{
+			Value = Convert.ToDecimal(val);
+			MinValue = Convert.ToDecimal(min.HasValue ? min.Value : int.MinValue);
+			MaxValue = Convert.ToDecimal(max.HasValue ? max.Value : int.MaxValue);
+			MaxValue = max.Value;
+			NumericFormat = "0";
 		}
 	}
 
@@ -154,6 +164,7 @@ namespace Core
 		{
 			using (var od = new System.Windows.Forms.FolderBrowserDialog())
 			{
+				od.SelectedPath = Value;
 				if (od.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 				{
 					Value = od.SelectedPath;
@@ -178,6 +189,7 @@ namespace Core
 		void _Exec(object prop)
 		{
 			var dlg = new Microsoft.Win32.OpenFileDialog();
+			dlg.FileName = Value;
 			dlg.Filter = _filter;
 			dlg.AddExtension = true;
 			dlg.CheckFileExists = _exists;
@@ -185,6 +197,46 @@ namespace Core
 			{
 				Value = dlg.FileName;
 				NotifyPropertyChanged(nameof(Value));
+			}
+		}
+	}
+
+	public class ColorValueItem : BindableBase, IParametersValueItem
+	{
+		public static System.Windows.Media.Color ToSWMColor(System.Drawing.Color color) => System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
+		public static System.Drawing.Color ToSDColor(System.Windows.Media.Color color) => System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+		public System.Drawing.Color DColor => ToSDColor(Value);
+		public System.Drawing.Color MColor => Value;
+		public string ColorHex => System.Drawing.ColorTranslator.ToHtml(DColor);
+		public dynamic Value { get; set; }
+		public BasicCommand Exec { get; private set; }
+		public ColorValueItem(System.Windows.Media.Color color)
+		{
+			init(color);
+		}
+		void init(System.Windows.Media.Color color)
+		{
+			Value = color;
+			Exec = new BasicCommand(_Exec);
+		}
+		public ColorValueItem(string color)
+		{
+			init(ToSWMColor(System.Drawing.ColorTranslator.FromHtml(color)));
+		}
+		public ColorValueItem(System.Drawing.Color color)
+		{
+			init(ToSWMColor(color));
+		}
+		void _Exec(object prop)
+		{
+			using (var cd = new System.Windows.Forms.ColorDialog())
+			{
+				cd.Color = DColor;
+				if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+				{
+					Value = ToSWMColor(cd.Color);
+					NotifyPropertyChanged(nameof(Value));
+				}
 			}
 		}
 	}

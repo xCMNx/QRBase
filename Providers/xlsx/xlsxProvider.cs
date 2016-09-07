@@ -74,8 +74,8 @@ namespace xlsx
 				for (int i = FirstRow + (FirstIsHead ? 1 : 0); i <= last; i++)
 				{
 					var data = new QRData();
-					foreach (var f in _Fields.Values)
-						data.SimpleSetValue(f, sheet.Cells[$"{f}{i}"].Value);
+					foreach (var f in _Fields)
+						data.SimpleSetValue(f.Key, sheet.Cells[$"{f.Value}{i}"].Value);
 					lst.Add(data);
 				}
 				await Task.Yield();
@@ -158,17 +158,17 @@ namespace xlsx
 		{
 			var dict = new IParametersRequestItem[] {
 				new ParametersRequestItem(){ Title = "Filename", Value = new OpenFileValueItem(Filename, "OpenXml|*.xlsx", false) }
-				,new ParametersRequestItem(){ Title = "First row", Value = new IntValueItem(FirstRow, 1, 65535) }
-				,new ParametersRequestItem(){ Title = "First column", Value = new IntValueItem(FirstCol, 1, 65535) }
+				,new ParametersRequestItem(){ Title = "First row", Value = new NumericValueItem(FirstRow, 1, 65535) }
+				,new ParametersRequestItem(){ Title = "First column", Value = new NumericValueItem(FirstCol, 1, 65535) }
 				,new ParametersRequestItem(){ Title = "First row is title", Value = new BoolValueItem(FirstIsHead) }
 			};
 
 			if (await parametersRequest(dict, "OpenXml: Настройки файла", message))
 			{
-				Filename = (dict[0].Value as OpenFileValueItem).Value;
-				FirstRow = (dict[1].Value as IntValueItem).Value;
-				FirstCol = (dict[2].Value as IntValueItem).Value;
-				FirstIsHead = (dict[3].Value as BoolValueItem).Value;
+				Filename = dict[0].Value.Value;
+				FirstRow = dict[1].Value.Int;
+				FirstCol = dict[2].Value.Int;
+				FirstIsHead = dict[3].Value.Value;
 				return true;
 			}
 			return false;

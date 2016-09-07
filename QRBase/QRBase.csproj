@@ -80,8 +80,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\FormatContaier.xaml.cs">
+      <DependentUpon>FormatContaier.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\QRBar.xaml.cs">
+      <DependentUpon>QRBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="QuestionBlock.cs" />
     <Compile Include="ToastBlock.cs" />
+    <Page Include="Controls\FormatContaier.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\QRBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\QRItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

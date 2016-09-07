@@ -35,7 +35,7 @@ namespace Ui.Controls
 				if (decimal.TryParse(Text, NumberStyles.Number, CultureInfo.CurrentCulture.NumberFormat, out val))
 				{
 					Dirty = true;
-					Value = val;
+					this.SetCurrentValue(ValueProperty, val);
 					Dirty = false;
 				}
 			}
@@ -55,7 +55,7 @@ namespace Ui.Controls
 			{
 				Dirty = true;
 				//Text = this.Value.ToString("f", _numberFormatInfo);
-				Text = this.Value.ToString(NumericFormat, CultureInfo.CurrentCulture.NumberFormat);
+				SetCurrentValue(TextProperty, Value.ToString(NumericFormat, CultureInfo.CurrentCulture.NumberFormat));
 				Dirty = false;
 			}
 		}
@@ -360,8 +360,8 @@ namespace Ui.Controls
 		private static void OnIncreaseCommand(object sender, ExecutedRoutedEventArgs e) => (sender as NumericUpDown)?.OnIncrease();
 		private static void OnDecreaseCommand(object sender, ExecutedRoutedEventArgs e) => (sender as NumericUpDown)?.OnDecrease();
 
-		protected virtual void OnIncrease() => this.Value += Change;
-		protected virtual void OnDecrease() => this.Value -= Change;
+		protected virtual void OnIncrease() => SetCurrentValue(ValueProperty, Value + Change < Maximum ? Value + Change : Maximum);
+		protected virtual void OnDecrease() => SetCurrentValue(ValueProperty, Value - Change > Minimum ? Value - Change : Minimum);
 
 		#endregion
 

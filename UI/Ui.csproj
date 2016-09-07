@@ -51,6 +51,7 @@
     <Compile Include="Controls\Toast.cs" />
     <Compile Include="Controls\VirtualizingWrapPanel.cs" />
     <Compile Include="Converters\BoolInvertConverter.cs" />
+    <Compile Include="Converters\ColorToSolidBrushConverter.cs" />
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Converters\VisibilityToBool.cs" />
     <Compile Include="UiBindableBase.cs" />

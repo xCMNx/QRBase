@@ -64,7 +64,25 @@ namespace QRBase
 			}
 		}
 
+		public static string GenObjInfo(this object data, string format)
+		{
+			try
+			{
+				if (data is QRData)
+					return GenInfo(data as QRData, format);
+				if (data == null)
+					return string.Empty;
+				var t = data.GetType();
+				return geRegex.Replace(format, m => t.GetProperty(m.Groups[1].Value, System.Reflection.BindingFlags.IgnoreCase | System.Reflection.BindingFlags.Default)?.GetValue(data)?.ToString());
+			}
+			catch
+			{
+				return string.Empty;
+			}
+		}
+
 		static QRCodeGenerator qrGenerator = new QRCodeGenerator();
-		public static System.Windows.Media.Imaging.BitmapSource ToQRImageSource(this string source, int pixelsPerModule = 20) => new QRCode(qrGenerator.CreateQrCode(source, QRCodeGenerator.ECCLevel.Q)).GetGraphic(pixelsPerModule).ToBitmapSource();
+		public static System.Windows.Media.Imaging.BitmapSource ToQRImageSource(this string source, int pixelsPerModule = 20, string foreground = "#000000", string background = "#FFFFFF") => ToQRCode(source).GetGraphic(pixelsPerModule, foreground, background).ToBitmapSource();
+		public static QRCode ToQRCode(this string source) => new QRCode(qrGenerator.CreateQrCode(source, QRCodeGenerator.ECCLevel.Q));
 	}
 }
