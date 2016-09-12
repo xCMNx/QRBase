@@ -9,7 +9,7 @@
         xmlns:views="clr-namespace:Views"
         local:CommandSinkBinding.CommandSink="{Binding}"
         xmlns:ui="clr-namespace:Ui.Controls;assembly=Ui"
-        Title="QRGenerator" Height="350" Width="525">
+        Title="QRGenerator" Height="500" Width="800" WindowStartupLocation="CenterScreen">
 	<Window.DataContext>
 		<mdl:MainVM/>
 	</Window.DataContext>

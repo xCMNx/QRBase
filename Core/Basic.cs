@@ -31,43 +31,11 @@ namespace Core
 		public string Hint { get; set; }
 	}
 
-	public class TextRequestItem : BindableBase, IParametersRequestItem
-	{
-		public string Title { get; set; }
-		public dynamic Value { get { throw new InvalidOperationException(); } set { throw new InvalidOperationException(); } }
-		public string Hint { get { throw new InvalidOperationException(); } set { throw new InvalidOperationException(); } }
-	}
-
 	public class BoolRequestItem : BindableBase, IParametersRequestItem
 	{
 		public string Title { get; set; }
 		public dynamic Value { get; set; }
 		public string Hint { get; set; }
-	}
-
-	public class MemoRequestItem : BindableBase, IParametersRequestItem
-	{
-		public string Title { get; set; }
-		public dynamic Value { get; set; }
-		public string Hint { get; set; }
-	}
-
-	public class CheckValueItem : BindableBase, IParametersValueItem
-	{
-		public string Title { get; set; }
-		public bool IsChecked { get; set; }
-		public dynamic Value
-		{
-			get { return IsChecked; }
-			set { IsChecked = (bool)value; }
-		}
-		public string Hint { get; set; }
-		public CheckValueItem(bool isChecked, string title, string hint = null)
-		{
-			IsChecked = isChecked;
-			Title = title;
-			Hint = hint;
-		}
 	}
 
 	public class ListValueItem : BindableBase, IParametersValueItem
@@ -109,6 +77,13 @@ namespace Core
 		public StringValueItem(string val)
 		{
 			Value = val;
+		}
+	}
+
+	public class MemoValueItem : StringValueItem
+	{
+		public MemoValueItem(string val) : base(val)
+		{
 		}
 	}
 
@@ -201,13 +176,22 @@ namespace Core
 		}
 	}
 
+	public static partial class Helpers
+	{
+		static System.Windows.Media.ColorConverter colorConverter = new System.Windows.Media.ColorConverter();
+		public static System.Windows.Media.Color ToSWMColor(this System.Drawing.Color color) => System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
+		public static System.Drawing.Color ToSDColor(this System.Windows.Media.Color color) => System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+		public static string ToHex(this System.Drawing.Color color) => System.Drawing.ColorTranslator.ToHtml(color);
+		public static string ToHex(this System.Windows.Media.Color color) => colorConverter.ConvertToString(color);
+		public static System.Windows.Media.Color ToSWMColor(this string hexColor) => (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(hexColor);
+		public static System.Drawing.Color ToSDColor(this string hexColor) => System.Drawing.ColorTranslator.FromHtml(hexColor);
+	}
+
 	public class ColorValueItem : BindableBase, IParametersValueItem
 	{
-		public static System.Windows.Media.Color ToSWMColor(System.Drawing.Color color) => System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
-		public static System.Drawing.Color ToSDColor(System.Windows.Media.Color color) => System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
-		public System.Drawing.Color DColor => ToSDColor(Value);
+		public System.Drawing.Color DColor => Helpers.ToSDColor(Value);
 		public System.Drawing.Color MColor => Value;
-		public string ColorHex => System.Drawing.ColorTranslator.ToHtml(DColor);
+		public string ColorHex => Helpers.ToHex(Value);
 		public dynamic Value { get; set; }
 		public BasicCommand Exec { get; private set; }
 		public ColorValueItem(System.Windows.Media.Color color)
@@ -221,11 +205,11 @@ namespace Core
 		}
 		public ColorValueItem(string color)
 		{
-			init(ToSWMColor(System.Drawing.ColorTranslator.FromHtml(color)));
+			init(color.ToSWMColor());
 		}
 		public ColorValueItem(System.Drawing.Color color)
 		{
-			init(ToSWMColor(color));
+			init(color.ToSWMColor());
 		}
 		void _Exec(object prop)
 		{
@@ -234,7 +218,7 @@ namespace Core
 				cd.Color = DColor;
 				if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 				{
-					Value = ToSWMColor(cd.Color);
+					Value = cd.Color.ToSWMColor();
 					NotifyPropertyChanged(nameof(Value));
 				}
 			}

@@ -36,6 +36,32 @@ namespace QRBase.Controls
 			set { SetValue(QRFormatProperty, value); }
 		}
 
+		public static readonly DependencyProperty TextFormatProperty = DependencyProperty.Register(
+			nameof(TextFormat),
+			typeof(string),
+			typeof(QRItem),
+			new PropertyMetadata((d, e) => (d as QRItem)?.Update())
+		);
+
+		public string TextFormat
+		{
+			get { return (string)GetValue(TextFormatProperty); }
+			set { SetValue(TextFormatProperty, value); }
+		}
+
+		public static readonly DependencyProperty ShowTextProperty = DependencyProperty.Register(
+			nameof(ShowText),
+			typeof(bool),
+			typeof(QRItem),
+			new PropertyMetadata(false, (d, e) => (d as QRItem)?.Update())
+		);
+
+		public bool ShowText
+		{
+			get { return (bool)GetValue(ShowTextProperty); }
+			set { SetValue(ShowTextProperty, value); }
+		}
+
 		public static readonly DependencyProperty QRBackgroundProperty = DependencyProperty.Register(
 			nameof(QRBackground),
 			typeof(string),
@@ -75,13 +101,77 @@ namespace QRBase.Controls
 			set { SetValue(QRSizeProperty, value); }
 		}
 
+		public static readonly DependencyProperty QRFullProperty = DependencyProperty.Register(
+			nameof(QRFull),
+			typeof(bool),
+			typeof(QRItem),
+			new PropertyMetadata(true, (d, e) => (d as QRItem)?.Update())
+		);
+
+		public bool QRFull
+		{
+			get { return (bool)GetValue(QRFullProperty); }
+			set { SetValue(QRFullProperty, value); }
+		}
+
+		public static readonly DependencyProperty TextBackgroundProperty = DependencyProperty.Register(
+			nameof(TextBackground),
+			typeof(string),
+			typeof(QRItem),
+			new PropertyMetadata("#000000", (d, e) => (d as QRItem)?.Update())
+		);
+
+		public string TextBackground
+		{
+			get { return (string)GetValue(TextBackgroundProperty); }
+			set { SetValue(TextBackgroundProperty, value); }
+		}
+
+		public static readonly DependencyProperty TextForegroundProperty = DependencyProperty.Register(
+			nameof(TextForeground),
+			typeof(string),
+			typeof(QRItem),
+			new PropertyMetadata("#FFFFFF", (d, e) => (d as QRItem)?.Update())
+		);
+
+		public string TextForeground
+		{
+			get { return (string)GetValue(TextForegroundProperty); }
+			set { SetValue(TextForegroundProperty, value); }
+		}
+
+		public static readonly DependencyProperty TextBorderWidthProperty = DependencyProperty.Register(
+			nameof(TextBorderWidth),
+			typeof(int),
+			typeof(QRItem),
+			new PropertyMetadata(2, (d, e) => (d as QRItem)?.Update())
+		);
+
+		public int TextBorderWidth
+		{
+			get { return (int)GetValue(TextBorderWidthProperty); }
+			set { SetValue(TextBorderWidthProperty, value); }
+		}
+
+		public static readonly DependencyProperty TextPercentProperty = DependencyProperty.Register(
+			nameof(TextPercent),
+			typeof(int),
+			typeof(QRItem),
+			new PropertyMetadata(50, (d, e) => (d as QRItem)?.Update())
+		);
+
+		public int TextPercent
+		{
+			get { return (int)GetValue(TextPercentProperty); }
+			set { SetValue(TextPercentProperty, value); }
+		}
+
 		public string Info => QRDataSource?.GenInfo(QRFormat);
 
 		public void Update()
 		{
-			var info = Info;
-			QRImageContainer.ToolTip = info;
-			QRImageContainer.Source = info?.ToQRImageSource(QRSize, QRForeground, QRBackground);
+			QRImageContainer.ToolTip = Info;
+			QRImageContainer.Source = QRDataSource?.MakeBmp(QRSize, QRFormat, QRForeground, QRBackground, QRFull, ShowText, TextFormat, TextForeground, TextBackground, TextBorderWidth, TextPercent)?.ToBitmapSource();
 		}
 	}
 }

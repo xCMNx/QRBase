@@ -8,10 +8,6 @@
 
 	<SolidColorBrush Color="White" x:Key="RequestItem.Foreground"/>
 
-	<DataTemplate DataType="{x:Type core:CheckValueItem}">
-		<CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Title}" ToolTip="{Binding Hint}" Foreground="{StaticResource RequestItem.Foreground}"/>
-	</DataTemplate>
-
 	<DataTemplate DataType="{x:Type core:BoolValueItem}">
 		<CheckBox IsChecked="{Binding Value}" Foreground="{StaticResource RequestItem.Foreground}"/>
 	</DataTemplate>
@@ -26,6 +22,15 @@
 
 	<DataTemplate DataType="{x:Type core:StringValueItem}">
 		<TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource RequestItem.Background}" Foreground="{StaticResource RequestItem.Foreground}"/>
+	</DataTemplate>
+	
+	<DataTemplate DataType="{x:Type core:MemoValueItem}">
+		<TextBox Name="tb" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" MaxLines="1" AcceptsTab="True" Background="{StaticResource RequestItem.Background}" Foreground="{StaticResource RequestItem.Foreground}"/>
+		<DataTemplate.Triggers>
+			<Trigger Property="IsKeyboardFocusWithin" Value="true">
+				<Setter Property="MaxLines" TargetName="tb" Value="5"/>
+			</Trigger>
+		</DataTemplate.Triggers>
 	</DataTemplate>
 
 	<DataTemplate DataType="{x:Type core:NumericValueItem}">
@@ -106,12 +111,6 @@
 	<DataTemplate DataType="{x:Type core:HeaderRequestItem}">
 		<Border BorderBrush="{StaticResource RequestItem.Foreground}" BorderThickness="0,0,0,1" Margin="0,2,0,0">
 			<TextBlock Margin="4,0" FontWeight="Bold" Text="{Binding Title}" ToolTip="{Binding Hint}" Foreground="{StaticResource RequestItem.Foreground}"/>
-		</Border>
-	</DataTemplate>
-
-	<DataTemplate DataType="{x:Type core:TextRequestItem}">
-		<Border BorderBrush="{StaticResource RequestItem.Foreground}">
-			<TextBlock Margin="4,0" Text="{Binding Title}" Foreground="{StaticResource RequestItem.Foreground}"/>
 		</Border>
 	</DataTemplate>
 </ResourceDictionary>

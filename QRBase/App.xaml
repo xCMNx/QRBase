@@ -23,6 +23,7 @@
 			<conv:VisibilityToBool x:Key="VisToBoolnv" Inverted="True"/>
 			<conv:BoolToVisibility x:Key="BoolToVisibility"/>
 			<conv:BoolToVisibility x:Key="BoolToVisibilityI" Inverted="true"/>
+			<conv:HexColorToSolidBrushConverter x:Key="HexToSolidBrush"/>
 
 		</ResourceDictionary>
 	</Application.Resources>

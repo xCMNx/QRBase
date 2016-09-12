@@ -32,9 +32,27 @@
 						<RowDefinition Height="*"/>
 						<RowDefinition Height="Auto"/>
 					</Grid.RowDefinitions>
-					<ctrl:QRItem QRDataSource="{Binding}" QRFormat="{Binding Path=DataContext.QRFormat, ElementName=root}" QRSize="{Binding Path=DataContext.QRSize, ElementName=root}" QRForeground="{Binding Path=DataContext.QRForeground, ElementName=root}" QRBackground="{Binding Path=DataContext.QRBackground, ElementName=root}" Grid.Row="0"/>
-					<ctrl:FormatContaier DataSource="{Binding}" Format="{Binding Path=DataContext.TitleFormat, ElementName=root}" Grid.Row="1">
-						<TextBlock Text="{Binding Text, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ctrl:FormatContaier}}}" TextAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+					<ctrl:QRItem 
+						QRDataSource="{Binding}" 
+						QRFormat="{Binding Path=DataContext.QRFormat, ElementName=root}" 
+						TextFormat="{Binding Path=DataContext.TextFormat, ElementName=root}" 
+						ShowText="{Binding Path=DataContext.ShowText, ElementName=root}"
+						QRSize="{Binding Path=DataContext.QRSize, ElementName=root}" 
+						QRForeground="{Binding Path=DataContext.QRForeground, ElementName=root}" 
+						QRBackground="{Binding Path=DataContext.QRBackground, ElementName=root}" 
+						TextForeground="{Binding Path=DataContext.TextForeground, ElementName=root}" 
+						TextBackground="{Binding Path=DataContext.TextBackground, ElementName=root}" 
+						TextBorderWidth="{Binding Path=DataContext.TextBorderWidth, ElementName=root}" 
+						TextPercent="{Binding Path=DataContext.TextPercent, ElementName=root}"
+						QRFull="{Binding Path=DataContext.QRFull, ElementName=root}" Grid.Row="0"/>
+					<ctrl:FormatContaier Visibility="{Binding Path=DataContext.ShowText, ElementName=root, Converter={StaticResource BoolToVisibilityI}, ConverterParameter=C}" DataSource="{Binding}" Format="{Binding Path=DataContext.TextFormat, ElementName=root}" Grid.Row="1">
+						<TextBlock 
+							Foreground="{Binding Path=DataContext.TextForeground, ElementName=root, Converter={StaticResource HexToSolidBrush}}"
+							Background="{Binding Path=DataContext.TextBackground, ElementName=root, Converter={StaticResource HexToSolidBrush}}" 
+							Text="{Binding Text, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ctrl:FormatContaier}}}" 
+							TextAlignment="Center" 
+							TextTrimming="CharacterEllipsis" 
+							ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
 					</ctrl:FormatContaier>
 				</Grid>
 			</DataTemplate>
@@ -43,10 +61,10 @@
 				<ContentPresenter x:Name="centralTile" Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{Binding}" ContentTemplate="{StaticResource mainTile}"/>
 			</DataTemplate>
 
-			<ui:TileView x:Key="Tile" ItemWidth="150" ItemHeight="150" ItemTemplate="{StaticResource centralTile}"/>
+			<ui:TileView x:Key="Tile" ItemWidth="{Binding QRPreviewSize}" ItemHeight="{Binding QRPreviewSize}" ItemTemplate="{StaticResource centralTile}"/>
 
 			<DataTemplate x:Key="galeryTile">
-				<ContentPresenter Width="100" Height="100" Margin="3" Content="{Binding}" ContentTemplate="{StaticResource mainTile}"/>
+				<ContentPresenter Width="{Binding DataContext.QRPreviewSize, ElementName=root}" Height="{Binding DataContext.QRPreviewSize, ElementName=root}" Margin="3" Content="{Binding}" ContentTemplate="{StaticResource mainTile}"/>
 			</DataTemplate>
 
 			<ui:GaleryView x:Key="Galery" ItemTemplate="{StaticResource galeryTile}">
@@ -69,7 +87,8 @@
 				<ColumnDefinition/>
 				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
-			<TextBox x:Name="tbQRFormat" Text="{Binding QRFormat, UpdateSourceTrigger=PropertyChanged, Delay=2000}" Grid.Column="0"/>
+			<Slider x:Name="trQRPreviewSize" Minimum="50" Maximum="500" Value="{Binding QRPreviewSize, Delay=500}" Grid.Column="0"/>
+			<!--<TextBox x:Name="tbQRFormat" Text="{Binding QRFormat, UpdateSourceTrigger=PropertyChanged, Delay=2000}" Grid.Column="0"/>-->
 			<StackPanel Grid.Column="1" Height="20" Orientation="Horizontal">
 				<Button Margin="2" Command="{Binding SearchCommand}" CommandParameter="{Binding Text, ElementName=Filter}">
 					<Path Fill="Black" Stretch="Uniform" Data="M2.1299944,9.9798575L55.945994,9.9798575 35.197562,34.081179 35.197562,62.672859 23.428433,55.942383 23.428433,33.52121z M1.3001332,0L56.635813,0C57.355887,0,57.935946,0.5891428,57.935946,1.3080959L57.935946,2.8258877C57.935946,3.5448422,57.355887,4.133985,56.635813,4.133985L1.3001332,4.133985C0.58005941,4.133985,-2.3841858E-07,3.5448422,0,2.8258877L0,1.3080959C-2.3841858E-07,0.5891428,0.58005941,0,1.3001332,0z"/>
