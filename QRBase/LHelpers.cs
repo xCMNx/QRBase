@@ -93,6 +93,7 @@ namespace QRBase
 
 			// Create the Font object for the image text drawing.
 			var objFont = new System.Drawing.Font("Arial", 72, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+			sImageText = sImageText.Trim();
 			var size = System.Windows.Forms.TextRenderer.MeasureText(sImageText, objFont);
 
 			// Create the bmpImage again with the correct size for the text and font.

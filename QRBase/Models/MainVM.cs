@@ -394,10 +394,10 @@ namespace QRBase.Models
 								var p = border > 0 ? new System.Drawing.Pen(System.Drawing.Color.Black, border) : null;
 								using (var graph = System.Drawing.Graphics.FromImage(bmp))
 								{
-									var x = fullinterval / 2;
 									var y = fullinterval / 2;
-									for (var r = 0; r < cols && i < SelectedQRList.Count; r++, i++)
+									for (var r = 0; r < rows && i < SelectedQRList.Count; r++, i++)
 									{
+										var x = fullinterval / 2;
 										for (var c = 0; c < cols && i < SelectedQRList.Count; c++, i++)
 										{
 											if (p != null)
